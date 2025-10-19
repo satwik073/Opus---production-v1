@@ -98,7 +98,7 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
-        <Button variant="outlined">Get Started</Button>
+        <Button variant="outline">Get Started</Button>
       </footer>
     </div>
   );
