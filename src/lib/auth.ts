@@ -12,5 +12,5 @@ export const auth = betterAuth({
         autoSignIn: true,
     },
     secret: process.env.BETTER_AUTH_SECRET || "fallback-secret-key-change-in-production",
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
 });
