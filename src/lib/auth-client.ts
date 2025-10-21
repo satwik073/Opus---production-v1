@@ -1,3 +1,4 @@
+import { polarClient } from "@polar-sh/better-auth";
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
@@ -7,4 +8,5 @@ export const authClient = createAuthClient({
             window.location.href = '/login';
         },
     },
+    plugins: [polarClient()]
 });
