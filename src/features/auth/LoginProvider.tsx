@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { authClient } from '@/lib/auth-client';
+import Image from 'next/image';
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -61,8 +62,8 @@ const LoginProvider = () => {
 
   const isPending = form.formState.isSubmitting;
   return (
-    <div className='flex flex-col w-full gap-6'>
-      <Card className='w-full max-w-md mx-auto'>
+    <div className='flex flex-col w-full gap-6 border-0'>
+      <Card className='w-full max-w-md mx-auto border-1 border-gray-200'>
         <CardHeader className='text-center'>
           <CardTitle>Login</CardTitle>
           <CardDescription>Login to your account</CardDescription>
@@ -71,15 +72,17 @@ const LoginProvider = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
               <div className='grid gap-6'>
-                <div className='flex flex-col gap-4'>
-                  <Button disabled={isPending} variant='outline' className='w-full' type='button'>
+                <div className='flex flex-col gap-4 border-0' data-slot='card-action'>
+                  <Button disabled={isPending} variant='outline' className='w-full border-1 border-gray-300' type='button'>
+                    <Image src='/logos/github.svg' alt='GitHub' width={20} height={20} />
                     Continue with GitHub
                   </Button>
                 </div>
               </div>
               <div className='grid gap-6'>
-                <div className='flex flex-col gap-4'>
-                  <Button disabled={isPending} variant='outline' className='w-full' type='button'>
+                <div className='flex flex-col gap-4 border-0' data-slot='card-action'>
+                  <Button disabled={isPending}  variant='outline' className='w-full border-1 border-gray-300' type='button'>
+                    <Image src='/logos/google.svg' alt='Google' width={20} height={20} />
                     Continue with Google
                   </Button>
                 </div>
