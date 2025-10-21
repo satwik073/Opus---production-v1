@@ -19,12 +19,22 @@ export default function Home() {
     }
   }))
 
+  const testAI = useMutation(trpc.testAI.mutationOptions({
+    onSuccess: (data) => {
+      toast.success('AI test successful')
+    },
+    onError: (error) => {
+      toast.error('Failed to test AI')
+    }
+  }))
   return (
     <div>
       protected page
       {JSON.stringify(data)}
       <Button disabled={createWorkflow.isPending} onClick={() => createWorkflow.mutate()}>Create Workflow</Button>
       <Logout />
+     
+      <Button disabled={testAI.isPending} onClick={() => testAI.mutate()}>Test AI</Button>
     </div>
   );
 }
