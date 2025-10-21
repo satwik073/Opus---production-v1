@@ -63,7 +63,7 @@ const LoginProvider = () => {
   const isPending = form.formState.isSubmitting;
   return (
     <div className='flex flex-col w-full gap-6 border-0'>
-      <Card className='w-full max-w-md mx-auto border-1 border-gray-200'>
+      <Card className='w-full max-w-md mx-auto border-1 border-gray-200 dark:border-gray-900'>
         <CardHeader className='text-center'>
           <CardTitle>Login</CardTitle>
           <CardDescription>Login to your account</CardDescription>
