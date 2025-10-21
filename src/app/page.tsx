@@ -6,13 +6,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export default function Home() {
+  
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data } = useQuery(trpc.getWorkflows.queryOptions())
   const createWorkflow = useMutation(trpc.createWorkflow.mutationOptions({
     onSuccess: () => {
-      queryClient.invalidateQueries(trpc.getWorkflows.queryOptions())
-      toast.success('Workflow created successfully')
+      toast.success('Job queued successfully')
     },
     onError: (error) => {
       toast.error('Failed to create workflow')
