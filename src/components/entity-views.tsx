@@ -1,7 +1,17 @@
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronLeftIcon, ChevronRightIcon, FileIcon, PackageOpenIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Input } from "./ui/input";
+import { Spinner } from "./ui/spinner";
+
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty"
 
 type EntityHeaderProps = {
     title?: string;
@@ -108,5 +118,57 @@ export const EntityPagination = ({ page, totalPages, onPageChange, disabled }: E
                 Next
             </Button>
         </div>
+    )
+}
+
+interface StateViewProps {
+    message?: string;
+}
+
+
+
+export const LoadingView = ({ message }: StateViewProps) => {
+    return (
+        <div className="flex flex-col flex-1 gap-y-4 items-center justify-center h-full">
+            <Spinner className="size-4 animate-spin text-muted-foreground" />
+            {message && <p className="text-sm text-muted-foreground">{message || 'Loading...'}</p>}
+        </div>
+    )
+}
+
+export const ErrorView = ({ message }: StateViewProps) => {
+    return (
+        <div className="flex flex-col flex-1 gap-y-4 items-center justify-center h-full">
+            <AlertCircleIcon className="size-4 text-red-500" />
+            {message && <p className="text-sm text-red-500">{message || 'Error...'}</p>}
+        </div>
+    )
+}
+
+interface EmptyViewProps extends StateViewProps {
+ onNew?: () => void;
+ entity?: string;
+}
+
+
+export const EmptyView = ({ message, onNew, entity = 'items' }: EmptyViewProps) => {
+    return (
+        <Empty className="border border-dashed bg-white dark:bg-gray-900 border-border">
+         <EmptyHeader>
+            <EmptyMedia variant="icon">
+                <PackageOpenIcon />
+            </EmptyMedia>
+         </EmptyHeader>
+         <EmptyContent>
+            <EmptyTitle>No {entity} found</EmptyTitle>
+            <EmptyDescription>{message || 'No data...'}</EmptyDescription>
+         </EmptyContent>
+         {onNew && (
+            <Button variant="outline" size="sm" onClick={onNew} className="cursor-pointer">
+                <PlusIcon className="size-4" />
+                Create {entity}
+            </Button>
+         )}
+        </Empty>
     )
 }
