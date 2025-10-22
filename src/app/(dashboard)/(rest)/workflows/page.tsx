@@ -1,19 +1,28 @@
 import React, { Suspense } from 'react'
 import { requireAuth } from '@/lib/auth-utils'
-import { WorkflowsList, WorkflowsContainer } from '@/features/workflows/components/workflows';
+import { WorkflowsList, WorkflowsContainer, WorkflowsLoadingView, WorkflowsErrorView } from '@/features/workflows/components/workflows';
 import { prefetchWorkflows } from '@/features/workflows/server/prefetch';
 import { HydrateClient } from '@/TRPC/Server';
 import { ErrorBoundary } from 'react-error-boundary';
+import { SearchParams } from 'next/dist/server/request/search-params';
+import { workflowsParamsLoader } from '@/features/workflows/server/params-loader-entity';
 
-const Page = async () => {
+type Props ={
+  searchParams : Promise<SearchParams>
+}
+const Page = async ( {searchParams} : Props) => {
   await requireAuth();
-  prefetchWorkflows();
+
+  const params = await workflowsParamsLoader(searchParams)
+  prefetchWorkflows(params);
   return (
     <div>
       <WorkflowsContainer>
         <HydrateClient>
-          <ErrorBoundary fallback={<div>Error</div>}>
-            <Suspense fallback={<div>Loading...</div>}></Suspense>
+          <ErrorBoundary fallback={<WorkflowsErrorView />}>
+            <Suspense fallback={<WorkflowsLoadingView />}>
+            
+            </Suspense>
             <WorkflowsList />
           </ErrorBoundary>
         </HydrateClient>

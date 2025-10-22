@@ -1,6 +1,17 @@
-import { PlusIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronLeftIcon, ChevronRightIcon, FileIcon, PackageOpenIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Input } from "./ui/input";
+import { Spinner } from "./ui/spinner";
+
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty"
 
 type EntityHeaderProps = {
     title?: string;
@@ -27,7 +38,7 @@ export const EntityHeader = ({ title, description, newButtonLabel, disabled, isC
                 {description && <p className="text-xs md:text-sm text-muted-foreground">{description}</p>}
             </div>
             {onNew && !newButtonHref && (
-                <Button variant="outline" className="cursor-pointer"  size="sm" onClick={onNew} disabled={disabled || isCreating}>
+                <Button variant="outline" className="cursor-pointer" size="sm" onClick={onNew} disabled={disabled || isCreating}>
                     <PlusIcon
                         className="size-4" />
                     {newButtonLabel}
@@ -69,5 +80,95 @@ export const EntityContainer = ({ header, search, pagination, children }: Entity
                 {pagination && pagination}
             </div>
         </div>
+    )
+}
+
+interface EntitySearchProps {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+}
+
+export const EntitySearch = ({ value, onChange, placeholder = 'Search' }: EntitySearchProps) => {
+    return (
+        <div className="relative ml-auto">
+            <SearchIcon className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input className="max-w-[200px] bg-background shadow-none border-border pl-8" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
+            />
+        </div>
+    )
+}
+
+interface EntityPaginationProps {
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    disabled?: boolean;
+}
+
+export const EntityPagination = ({ page, totalPages, onPageChange, disabled }: EntityPaginationProps) => {
+    return (
+        <div className="flex items-center gap-x-2">
+            <Button variant="outline" size="sm" onClick={() => onPageChange(page - 1)} disabled={page === 1 || disabled} className="cursor-pointer">
+                <ChevronLeftIcon className="size-4" />
+                Previous
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => onPageChange(page + 1)} disabled={page === totalPages || disabled} className="cursor-pointer">
+                <ChevronRightIcon className="size-4" />
+                Next
+            </Button>
+        </div>
+    )
+}
+
+interface StateViewProps {
+    message?: string;
+}
+
+
+
+export const LoadingView = ({ message }: StateViewProps) => {
+    return (
+        <div className="flex flex-col flex-1 gap-y-4 items-center justify-center h-full">
+            <Spinner className="size-4 animate-spin text-muted-foreground" />
+            {message && <p className="text-sm text-muted-foreground">{message || 'Loading...'}</p>}
+        </div>
+    )
+}
+
+export const ErrorView = ({ message }: StateViewProps) => {
+    return (
+        <div className="flex flex-col flex-1 gap-y-4 items-center justify-center h-full">
+            <AlertCircleIcon className="size-4 text-red-500" />
+            {message && <p className="text-sm text-red-500">{message || 'Error...'}</p>}
+        </div>
+    )
+}
+
+interface EmptyViewProps extends StateViewProps {
+ onNew?: () => void;
+ entity?: string;
+}
+
+
+export const EmptyView = ({ message, onNew, entity = 'items' }: EmptyViewProps) => {
+    return (
+        <Empty className="border border-dashed bg-white dark:bg-gray-900 border-border">
+         <EmptyHeader>
+            <EmptyMedia variant="icon">
+                <PackageOpenIcon />
+            </EmptyMedia>
+         </EmptyHeader>
+         <EmptyContent>
+            <EmptyTitle>No {entity} found</EmptyTitle>
+            <EmptyDescription>{message || 'No data...'}</EmptyDescription>
+         </EmptyContent>
+         {onNew && (
+            <Button variant="outline" size="sm" onClick={onNew} className="cursor-pointer">
+                <PlusIcon className="size-4" />
+                Create {entity}
+            </Button>
+         )}
+        </Empty>
     )
 }
