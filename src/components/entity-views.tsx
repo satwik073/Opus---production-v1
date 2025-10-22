@@ -32,13 +32,13 @@ type EntityHeaderProps = {
 
 export const EntityHeader = ({ title, description, newButtonLabel, disabled, isCreating, onNew, newButtonHref }: EntityHeaderProps) => {
     return (
-        <div className="flex flex-row items-center justify-between gap-x-4">
+        <div className="flex flex-row items-center justify-between gap-x-4 w-full">
             <div className="flex flex-col">
                 <h1 className="text-lg md:text-xl font-semibold">{title}</h1>
                 {description && <p className="text-xs md:text-sm text-muted-foreground">{description}</p>}
             </div>
             {onNew && !newButtonHref && (
-                <Button variant="outline" className="cursor-pointer" size="sm" onClick={onNew} disabled={disabled || isCreating}>
+                <Button variant="default" className="cursor-pointer h-8.5" size="sm" onClick={onNew} disabled={disabled || isCreating}>
                     <PlusIcon
                         className="size-4" />
                     {newButtonLabel}
@@ -71,10 +71,12 @@ export const EntityContainer = ({ header, search, pagination, children }: Entity
     return (
         <div className="p-4 md:px-10 md:py-6 h-full">
 
+ 
             <div className="mx-auto max-w-screen-xl w-full flex flex-col gap-y-8 h-full">
+                <div className="flex flex-row items-center justify-between">
+                </div>
                 {header && header}
                 <div className="flex flex-col gap-y-4 h-full">
-                    {search && search}
                     {children}
                 </div>
                 {pagination && pagination}
