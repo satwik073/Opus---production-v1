@@ -29,6 +29,7 @@ import { imageLinks } from "../../public/logos/imagelinks"
 import { Button } from "./ui/button"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useHasActiveSubscription } from "@/features/auth/subscriptions/hooks/use-subscription"
 
 const sidebar_menu_items = [
     {
@@ -56,6 +57,7 @@ const AppSidebar = () => {
     const router = useRouter()
     const pathname = usePathname()
     const isActive = (url: string) => pathname === url
+    const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
     return (
         <Sidebar collapsible="icon" className="border-0">
             <SidebarHeader>
@@ -93,18 +95,22 @@ const AppSidebar = () => {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            tooltip="Upgrade to Pro"
-                            isActive={false}
-                            onClick={() => {
-                                router.push('/billing')
-                            }}
-                            className="gap-x-4 h-10 px-4">
-                            <StarIcon className="size-4" />
-                            <span className="truncate">Upgrade to Pro</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    {
+                        !hasActiveSubscription && !isLoading && (
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    tooltip="Upgrade to Pro"
+                                    isActive={false}
+                                    onClick={() => {
+                                        authClient.checkout({ slug: "opus-development-v1" })
+                                    }}
+                                    className="gap-x-4 h-10 px-4">
+                                    <StarIcon className="size-4" />
+                                    <span className="truncate">Upgrade to Pro</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )
+                    }
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             tooltip="Billing portal"
