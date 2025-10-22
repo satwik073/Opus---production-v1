@@ -4,7 +4,7 @@ import "./globals.css";
 import { TRPCReactProvider } from "@/TRPC/Client";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./theme-provider";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -39,13 +39,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TRPCReactProvider>
+
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <NuqsAdapter>
+              {children}
+            </NuqsAdapter>
           </ThemeProvider>
           <Toaster />
         </TRPCReactProvider>
