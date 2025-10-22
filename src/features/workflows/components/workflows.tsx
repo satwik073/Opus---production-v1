@@ -91,20 +91,7 @@ export const WorkflowsList = () => {
         <TooltipProvider>
             <div className="w-full">
                 {workflows.data?.items?.length > 0 ? (
-                    <div className="border border-border rounded-xl shadow-sm bg-card overflow-hidden">
-                        <div className="bg-muted/30 px-6 py-3 border-b border-border">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                    <h3 className="font-semibold text-sm">Workflows</h3>
-                                    <Badge variant="secondary" className="text-xs">
-                                        {workflows.data.items.length} total
-                                    </Badge>
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                    Last updated: {new Date().toLocaleTimeString()}
-                                </div>
-                            </div>
-                        </div>
+                    <div className="border border-gray-200 dark:border-gray-800 rounded-md bg-card overflow-hidden">
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-b border-border hover:bg-transparent">
@@ -138,8 +125,8 @@ export const WorkflowsList = () => {
                                         className="cursor-pointer hover:bg-muted/30 transition-all duration-200 group border-b border-border/50 last:border-b-0"
                                         onClick={() => router.push(`/workflows/${workflow.id}`)}
                                     >
-                                        <TableCell className="py-4">
-                                            <div className="flex items-center space-x-3">
+                                        <TableCell className="py-2">
+                                            <div className="flex items-center space-x-4">
                                                 <Avatar className="h-10 w-10">
                                                     <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                                                         {getWorkflowInitials(workflow.name)}
@@ -150,29 +137,32 @@ export const WorkflowsList = () => {
                                                         {workflow.name || 'Untitled Workflow'}
                                                     </div>
                                                     <div className="text-xs text-muted-foreground flex items-center space-x-2">
-                                                        <span>ID: {workflow.id.slice(0, 8)}...</span>
+                                                        <span>ID: {workflow.id}</span>
                                                         {workflow.tags && workflow.tags.length > 0 && (
                                                             <Badge variant="outline" className="text-xs px-1.5 py-0.5">
                                                                 {workflow.tags[0]}
                                                             </Badge>
                                                         )}
                                                     </div>
+                                                   
                                                 </div>
+                                                
                                             </div>
                                         </TableCell>
+                                        
                                         <TableCell>
                                             <div className="flex items-center space-x-2">
                                                 {getStatusIcon(workflow.active ? 'active' : 'inactive')}
                                                 <Badge 
                                                     variant="outline"
-                                                    className={`text-xs font-medium ${getStatusColor(workflow.active ? 'active' : 'inactive')}`}
+                                                    className={`text-xs font-medium ${getStatusColor(workflow ? 'active' : 'inactive')}`}
                                                 >
-                                                    {workflow.active ? "Active" : "Inactive"}
+                                                    {workflow ? "Active" : "Inactive"}
                                                 </Badge>
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex flex-col space-y-1">
+                                            <div className="flex flex-row items-center space-x-2">
                                                 <div className="flex items-center space-x-1">
                                                     <ZapIcon className="w-3 h-3 text-muted-foreground" />
                                                     <span className="font-semibold text-sm">{workflow.executionCount || 0}</span>
@@ -184,7 +174,7 @@ export const WorkflowsList = () => {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-col space-y-1">
-                                                <div className="flex items-center space-x-2">
+                                                <div className="flex items-center justify-center space-x-2">
                                                     <span className="text-sm font-medium">
                                                         {workflow.successRate ? `${Math.round(workflow.successRate)}%` : 'N/A'}
                                                     </span>
@@ -198,13 +188,13 @@ export const WorkflowsList = () => {
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                                            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                                                 <CalendarIcon className="w-3 h-3" />
                                                 <span>{formatDate(workflow.createdAt)}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                                            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                                                 <ClockIcon className="w-3 h-3" />
                                                 <span>{formatDateTime(workflow.updatedAt)}</span>
                                             </div>
@@ -216,13 +206,13 @@ export const WorkflowsList = () => {
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
-                                                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            className="h-8 w-8 p-0 transition-opacity"
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
                                                                 router.push(`/workflows/${workflow.id}`)
                                                             }}
                                                         >
-                                                            <EyeIcon className="h-4 w-4" />
+                                                            <EyeIcon className="h-2 w-2" />
                                                         </Button>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
@@ -235,13 +225,13 @@ export const WorkflowsList = () => {
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
-                                                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            className="h-8 w-8 p-0  transition-opacity"
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
                                                                 toast.info('Execute workflow functionality coming soon')
                                                             }}
                                                         >
-                                                            <PlayIcon className="h-4 w-4" />
+                                                            <PlayIcon className="h-2 w-2" />
                                                         </Button>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
@@ -254,7 +244,7 @@ export const WorkflowsList = () => {
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
-                                                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            className="h-8 w-8 p-0  transition-opacity"
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
                                                             <MoreHorizontalIcon className="h-4 w-4" />
@@ -262,32 +252,32 @@ export const WorkflowsList = () => {
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="w-48">
                                                         <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                                                            <EyeIcon className="w-4 h-4 mr-2" />
+                                                            <EyeIcon className="w-3 h-3 mr-2" />
                                                             View Details
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                                                            <EditIcon className="w-4 h-4 mr-2" />
+                                                            <EditIcon className="w-3 h-3 mr-2" />
                                                             Edit Workflow
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                                                            <PlayIcon className="w-4 h-4 mr-2" />
+                                                            <PlayIcon className="w-3 h-3 mr-2" />
                                                             Execute Now
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator />
                                                         <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                                                            <CopyIcon className="w-4 h-4 mr-2" />
+                                                            <CopyIcon className="w-3 h-3 mr-2" />
                                                             Duplicate
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                                                            <SettingsIcon className="w-4 h-4 mr-2" />
+                                                            <SettingsIcon className="w-3 h-3 mr-2" />
                                                             Settings
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator />
                                                         <DropdownMenuItem 
                                                             onClick={(e) => e.stopPropagation()}
-                                                            className="text-destructive focus:text-destructive"
+                                                            className="text-red-500 focus:text-destructive"
                                                         >
-                                                            <TrashIcon className="w-4 h-4 mr-2" />
+                                                            <TrashIcon className="w-3 h-3 mr-2 text-red-500" />
                                                             Delete
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
@@ -325,7 +315,7 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
         })
     }
     return (
-        <div>
+        <div className="flex flex-row items-center justify-between gap-x-4 w-full">
             <EntityHeader
                 title="Workflows"
                 description="Create and manage your workflows"
@@ -333,6 +323,9 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
                 disabled={disabled}
                 isCreating={createWorkflow.isPending} />
             {modal}
+            <div className="flex flex-row items-center justify-end">
+                <WorkflowsSearch />
+            </div>
         </div>
     )
 }
