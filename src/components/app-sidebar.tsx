@@ -3,12 +3,21 @@
 
 import React from "react"
 import {
+    BellIcon,
     CreditCardIcon,
+    EclipseIcon,
+    ExternalLinkIcon,
+    FingerprintIcon,
+    FolderKeyIcon,
     FolderOpenIcon,
     HistoryIcon,
     KeyIcon,
     LogOutIcon,
+    ScanLineIcon,
+    SettingsIcon,
+    SplinePointerIcon,
     StarIcon,
+    TouchpadIcon,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -36,19 +45,61 @@ const sidebar_menu_items = [
         title: "Workflows",
         items: [
             {
-                title: "Workflows",
-                icon: FolderOpenIcon,
+                title: "Dashboard",
+                icon: TouchpadIcon,
                 url: "/workflows",
             },
             {
-                title: "Credentials",
-                icon: KeyIcon,
+                title: "Appearence",
+                icon: EclipseIcon,
                 url: "/credentials",
             },
             {
-                title: "Executions",
-                icon: HistoryIcon,
+                title: "Connections",
+                icon: ScanLineIcon,
                 url: "/executions",
+            },
+            {
+                title: "Workflows",
+                icon: SplinePointerIcon,
+                url: "/workflows",
+            },
+            {
+                title : 'Credentials',
+                icon: FolderKeyIcon,
+                url: "/credentials",
+            },
+            {
+                title : 'Executions',
+                icon : ExternalLinkIcon,
+                url : '/executions',
+            }
+        ],
+    },
+]
+const sidebar_menu_items2 = [
+    {
+        title: "Account",
+        items: [
+            {
+                title: "Payments",
+                icon: CreditCardIcon,
+                url: "/credentials",
+            },
+            {
+                title: "Security & access",
+                icon: FingerprintIcon,
+                url: "/executions",
+            },
+            {
+                title: "Notifications",
+                icon: BellIcon,
+                url: "/executions",
+            },
+            {
+                title: "Settings",
+                icon: SettingsIcon,
+                url: "/credentials",
             },
         ],
     },
@@ -61,11 +112,11 @@ const AppSidebar = () => {
     return (
         <Sidebar collapsible="icon" className="border-0">
             <SidebarHeader>
-                <SidebarMenuItem className="h-20">
+                <SidebarMenuItem className="h-20 border-dashed border-b-1  border-gray-200 dark:border-gray-800">
                     <SidebarMenuButton asChild className="h-20">
                         <Link href="/workflows" prefetch>
-                            <Image src={imageLinks.flowBolt} alt="GitHub" width={50} height={40} />
-                            <span className="truncate">Opus</span>
+                            <Image src={imageLinks.logo} alt="GitHub" className="rounded-xl w-10 h-10 gap-x-4 mr-2" width={50} height={40} />
+                            <span className="truncate text-md font-bold text-black dark:text-white ">Opus Automation</span>
 
                         </Link>
                     </SidebarMenuButton>
@@ -77,13 +128,41 @@ const AppSidebar = () => {
                 {sidebar_menu_items.map((group_items) => (
                     <SidebarGroup key={group_items.title}>
                         <SidebarGroupContent>
+                            <div className="flex uppercase flex-row px-4 pb-4 text-[10px] font-medium text-muted-foreground">
+                                {group_items.title}
+                            </div>
                             <SidebarMenu>
                                 {group_items.items.map((item) => (
                                     <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton tooltip={item.title} isActive={(item.url === '/' ? pathname === '/' : pathname.startsWith(item.url))} asChild className="gap-x-4 h-10 px-4">
+                                        <SidebarMenuButton tooltip={item.title} 
+                                        // isActive={(item.url === '/' ? pathname === '/' : pathname.startsWith(item.url))}
+                                         asChild className=" h-8 px-4 gap-x-4">
                                             <Link href={item.url} prefetch={true}>
-                                                <item.icon className="size-4" />
-                                                <span className="truncate">{item.title}</span>
+                                                <item.icon style={{ fontSize: '30px' , width: '21px', height: '20px' }} className="w-24 h-24 text-gray-500 dark:text-gray-400" />
+                                                <span className="truncate font-semibold text-gray-500 dark:text-gray-400 ">{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                ))}
+                {sidebar_menu_items2.map((group_items) => (
+                    <SidebarGroup key={group_items.title}>
+                        <SidebarGroupContent>
+                            <div className="flex uppercase flex-row px-4 pb-4 text-[10px] font-medium text-muted-foreground">
+                                {group_items.title}
+                            </div>
+                            <SidebarMenu>
+                                {group_items.items.map((item) => (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton tooltip={item.title} 
+                                        // isActive={(item.url === '/' ? pathname === '/' : pathname.startsWith(item.url))}
+                                         asChild className=" h-8 px-4 gap-x-4">
+                                            <Link href={item.url} prefetch={true}>
+                                                <item.icon style={{ fontSize: '30px' , width: '21px', height: '20px' }} className="w-24 h-24 text-gray-500 dark:text-gray-400" />
+                                                <span className="truncate font-semibold text-gray-500 dark:text-gray-400 ">{item.title}</span>
                                             </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
