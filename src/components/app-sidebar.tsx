@@ -4,6 +4,7 @@
 import React from "react"
 import {
     BellIcon,
+    ChevronDown,
     CreditCardIcon,
     EclipseIcon,
     ExternalLinkIcon,
@@ -32,7 +33,8 @@ import {
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem
+    SidebarMenuItem,
+    SidebarTrigger
 } from "@/components/ui/sidebar"
 import { imageLinks } from "../../public/logos/imagelinks"
 import { Button } from "./ui/button"
@@ -110,13 +112,13 @@ const AppSidebar = () => {
     const isActive = (url: string) => pathname === url
     const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
     return (
-        <Sidebar collapsible="icon" className="border-0">
-            <SidebarHeader>
-                <SidebarMenuItem className="h-20 border-dashed border-b-1  border-gray-200 dark:border-gray-800">
-                    <SidebarMenuButton asChild className="h-20">
+        <Sidebar collapsible="icon" className="border-0 bg-white dark:bg-white p-0">
+            <SidebarHeader className="p-0"  >
+                <SidebarMenuItem className="h-14 p-2 border-b-1  border-gray-200 dark:border-[#27282b]">
+                    <SidebarMenuButton asChild className="h-10">
                         <Link href="/workflows" prefetch>
-                            <Image src={imageLinks.logo} alt="GitHub" className="rounded-xl w-10 h-10 gap-x-4 mr-2" width={50} height={40} />
-                            <span className="truncate text-md font-bold text-black dark:text-white ">Opus Automation</span>
+                            <Image src={imageLinks.logo} alt="GitHub" className="rounded-xl w-8 h-8  mr-2" width={50} height={40} />
+                            <span className="truncate text-[16px] font-bold text-black tracking-tightest dark:text-white flex items-center gap-x-2"><span className="tracking-tightest">Opus Automation</span> <ChevronDown className="size-4"/></span>
 
                         </Link>
                     </SidebarMenuButton>

@@ -12,6 +12,7 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty"
+import { imageLinks } from "../../public/logos/imagelinks";
 
 type EntityHeaderProps = {
     title?: string;
@@ -38,7 +39,7 @@ export const EntityHeader = ({ title, description, newButtonLabel, disabled, isC
                 {description && <p className="text-xs md:text-sm text-muted-foreground">{description}</p>}
             </div>
             {onNew && !newButtonHref && (
-                <Button variant="default" className="cursor-pointer h-8.5" size="sm" onClick={onNew} disabled={disabled || isCreating}>
+                <Button variant="default" className="cursor-pointer h-[28px]" size="sm" onClick={onNew} disabled={disabled || isCreating}>
                     <PlusIcon
                         className="size-4" />
                     {newButtonLabel}
@@ -69,13 +70,16 @@ type EntityContainerProps = {
 
 export const EntityContainer = ({ header, search, pagination, children }: EntityContainerProps) => {
     return (
-        <div className="p-4 md:px-5 md:py-6 h-full">
+        <div className=" md:py- h-full ">
 
  
-            <div className="mx-auto  w-full flex flex-col gap-y-8 h-full">
+            <div className="mx-auto  w-full flex flex-col  h-full">
                 <div className="flex flex-row items-center justify-between">
                 </div>
+              
+                <div className="border-b p-4 md:px-5 md:py-3 border-gray-200 dark:border-[#27282b] sticky top-0 bg-white dark:bg-[#14181c] z-10">
                 {header && header}
+                </div>
                 <div className="flex flex-col gap-y-4 h-full">
                     {children}
                 </div>
@@ -95,7 +99,7 @@ export const EntitySearch = ({ value, onChange, placeholder = 'Search' }: Entity
     return (
         <div className="relative ml-auto">
             <SearchIcon className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input className="max-w-[200px] bg-background shadow-none border-border pl-8" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
+            <Input className="max-w-[200px] bg-background shadow-none border-border pl-8 h-[30px]" type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
             />
         </div>
     )
@@ -131,7 +135,7 @@ interface StateViewProps {
 
 export const LoadingView = ({ message }: StateViewProps) => {
     return (
-        <div className="flex flex-col flex-1 gap-y-4 items-center justify-center h-full">
+        <div className="flex mt-12 flex-col flex-1 gap-y-4 items-center justify-center h-full">
             <Spinner className="size-4 animate-spin text-muted-foreground" />
             {message && <p className="text-sm text-muted-foreground">{message || 'Loading...'}</p>}
         </div>
@@ -155,20 +159,19 @@ interface EmptyViewProps extends StateViewProps {
 
 export const EmptyView = ({ message, onNew, entity = 'items' }: EmptyViewProps) => {
     return (
-        <Empty className="border border-dashed bg-white dark:bg-gray-900 border-border">
+        <Empty className="">
          <EmptyHeader>
-            <EmptyMedia variant="icon">
-                <PackageOpenIcon />
-            </EmptyMedia>
+                <img src={imageLinks.emptyWorkflow.src} alt="Empty Workflow" width={215} height={140} />
+            
          </EmptyHeader>
          <EmptyContent>
-            <EmptyTitle>No {entity} found</EmptyTitle>
-            <EmptyDescription>{message || 'No data...'}</EmptyDescription>
+            <EmptyTitle className="text-[20px] font-medium">No {entity} found</EmptyTitle>
+            <EmptyDescription className="text-[15px] max-w-[250px]">{message || 'No data...'}</EmptyDescription>
          </EmptyContent>
          {onNew && (
-            <Button variant="outline" size="sm" onClick={onNew} className="cursor-pointer">
+            <Button variant="default" size="sm" onClick={onNew} className="cursor-pointer h-[28px] text-[14px]">
                 <PlusIcon className="size-4" />
-                Create {entity}
+                New {entity}
             </Button>
          )}
         </Empty>
