@@ -89,9 +89,9 @@ export const WorkflowsList = () => {
     
     return (
         <TooltipProvider>
-            <div className="w-full">
+            <div className="w-full mt-12">
                 {workflows.data?.items?.length > 0 ? (
-                    <div className="border border-gray-200 dark:border-gray-800 rounded-md bg-card overflow-hidden">
+                    <div className="border bg-white dark:bg-[#14181c] border-gray-200 dark:border-gray-800 rounded-md bg-card overflow-hidden">
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-b border-border hover:bg-transparent">
@@ -125,9 +125,9 @@ export const WorkflowsList = () => {
                                         className="cursor-pointer hover:bg-muted/30 transition-all duration-200 group border-b border-border/50 last:border-b-0"
                                         onClick={() => router.push(`/workflows/${workflow.id}`)}
                                     >
-                                        <TableCell className="py-2">
+                                        <TableCell className="">
                                             <div className="flex items-center space-x-4">
-                                                <Avatar className="h-10 w-10">
+                                                <Avatar className="h-6 w-6">
                                                     <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                                                         {getWorkflowInitials(workflow.name)}
                                                     </AvatarFallback>
@@ -136,7 +136,7 @@ export const WorkflowsList = () => {
                                                     <div className="font-medium text-foreground truncate">
                                                         {workflow.name || 'Untitled Workflow'}
                                                     </div>
-                                                    <div className="text-xs text-muted-foreground flex items-center space-x-2">
+                                                    <div className="text-[8px] text-muted-foreground flex items-center space-x-2">
                                                         <span>ID: {workflow.id}</span>
                                                         {workflow.tags && workflow.tags.length > 0 && (
                                                             <Badge variant="outline" className="text-xs px-1.5 py-0.5">
@@ -290,7 +290,7 @@ export const WorkflowsList = () => {
                         </Table>
                     </div>
                 ) : (
-                    <WorkflowsEmptyView />
+                    <WorkflowsLoadingView/>
                 )}
             </div>
         </TooltipProvider>
@@ -319,7 +319,7 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
             <EntityHeader
                 title="Workflows"
                 description="Create and manage your workflows"
-                newButtonLabel="New Workflow" onNew={handleCreateWorkflow}
+                newButtonLabel="New workflow" onNew={handleCreateWorkflow}
                 disabled={disabled}
                 isCreating={createWorkflow.isPending} />
             {modal}
@@ -344,10 +344,11 @@ export const WorkflowsPagination = () => {
     )
 }
 export const WorkflowsContainer = ({ children }: { children: React.ReactNode }) => {
+    const workflows = useSuspenseWorkflows()
     return (
         <EntityContainer header={<WorkflowsHeader />}
             search={<WorkflowsSearch />}
-            pagination={<WorkflowsPagination />}
+            pagination={ workflows.data?.items && workflows.data?.items?.length > 0 ? <WorkflowsPagination /> : null}
         >
             {children}
         </EntityContainer>
@@ -383,6 +384,6 @@ export const WorkflowsEmptyView = () => {
         })
     }
     return (
-        <EmptyView message="You don't have any workflows yet. Create one to get started." onNew={handleCreateWorkflow} />
+        <EmptyView entity="workflow" message="You don't have any workflows yet. Create one to get started." onNew={handleCreateWorkflow} />
     )
 }
