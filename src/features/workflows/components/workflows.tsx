@@ -290,7 +290,7 @@ export const WorkflowsList = () => {
                         </Table>
                     </div>
                 ) : (
-                    <WorkflowsLoadingView/>
+                    <WorkflowsEmptyView/>
                 )}
             </div>
         </TooltipProvider>
