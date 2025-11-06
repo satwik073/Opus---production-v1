@@ -91,14 +91,13 @@ export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
     }
 
     return (
-        <BreadcrumbItem onClick={() => setIsEditing(true)} className='cursor-pointer hover:text-for
-       transition-colors duration-100'>
+        <span onClick={() => setIsEditing(true)} className='cursor-pointer hover:text-foreground transition-colors duration-100 inline-flex items-center gap-1.5'>
             {isEditing ? (
-                <Input type="text" ref={inputRef} value={name} onBlur={handleSave} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} className='h-7 w-auto min-w-[100px]px-2' />
+                <Input type="text" ref={inputRef} value={name} onBlur={handleSave} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} className='h-7 w-auto min-w-[100px] px-2' />
             ) : (
                 <span onClick={() => setIsEditing(true)}>{workflow.name}</span>
             )}
-        </BreadcrumbItem>
+        </span>
     )
 }
 const EditorHeader = ({ workflowId }: { workflowId: string }) => {
