@@ -16,13 +16,12 @@ const Page = async ({ params }: PageProps) => {
     await requireAuth();
     prefetchWorkflow(workflowId);
     return (
-            <div>
+            <div className="h-screen flex flex-col overflow-hidden">
                 <HydrateClient>
                     <ErrorBoundary fallback={<EditorError />}>
                         <Suspense fallback={<EditorLoading />}>
                         <EditorHeader workflowId={workflowId}/>
-                        <main className="flex-1">
-
+                        <main className="flex-1 overflow-hidden">
                             <Editor workflowId={workflowId} />
                         </main>
                         </Suspense>
