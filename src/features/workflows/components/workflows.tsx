@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { useSuspenseWorkflows } from '../hooks/use-workflows'
+import { useRemoveWorkflow, useSuspenseWorkflows } from '../hooks/use-workflows'
 import { EntityContainer, EntityHeader, EntityPagination, EntitySearch, ErrorView, EmptyView, LoadingView } from '@/components/entity-views'
 import { useCreateWorkflow } from '../hooks/use-workflows'
 import { toast } from 'sonner'
@@ -11,7 +11,7 @@ import { useEntitySearch } from '@/hooks/use-entity-search'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { EyeIcon, PlayIcon, MoreHorizontalIcon, CalendarIcon, ClockIcon, ActivityIcon, CopyIcon, TrashIcon, EditIcon, SettingsIcon, ZapIcon, CheckCircleIcon, XCircleIcon, AlertCircleIcon } from 'lucide-react'
+import { EyeIcon, PlayIcon, MoreHorizontalIcon, CalendarIcon, ClockIcon, ActivityIcon, CopyIcon, TrashIcon, EditIcon, SettingsIcon, ZapIcon, CheckCircleIcon, XCircleIcon, AlertCircleIcon, Loader2 } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -68,7 +68,15 @@ export const WorkflowsList = () => {
                 return <ActivityIcon className="w-3 h-3 text-gray-400" />
         }
     }
-    
+    const { mutateAsync: removeWorkflow , isPending } = useRemoveWorkflow()
+    const handleRemoveWorkflow = async (id: string) => {
+        try {
+            await removeWorkflow({ id })
+        } catch (error) {
+            // Error is already handled in the mutation's onError callback
+            console.error('Error removing workflow:', error)
+        }
+    }
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'active':
@@ -89,7 +97,7 @@ export const WorkflowsList = () => {
     
     return (
         <TooltipProvider>
-            <div className="w-full mt-12">
+            <div className="w-full mt">
                 {workflows.data?.items?.length > 0 ? (
                     <div className="border bg-white dark:bg-[#14181c] border-gray-200 dark:border-gray-800 rounded-md bg-card overflow-hidden">
                         <Table>
@@ -274,11 +282,16 @@ export const WorkflowsList = () => {
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator />
                                                         <DropdownMenuItem 
-                                                            onClick={(e) => e.stopPropagation()}
+                                                            onClick={async (e) => {
+                                                                e.stopPropagation()
+                                                                await handleRemoveWorkflow(workflow.id)
+                                                            }}
                                                             className="text-red-500 focus:text-destructive"
+                                                            disabled={isPending}
                                                         >
                                                             <TrashIcon className="w-3 h-3 mr-2 text-red-500" />
-                                                            Delete
+                                                            {isPending && <Loader2 className="w-3 h-3 mr-2" />}
+                                                            {isPending ? 'Deleting...' : 'Delete'}
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -348,7 +361,7 @@ export const WorkflowsContainer = ({ children }: { children: React.ReactNode }) 
     return (
         <EntityContainer header={<WorkflowsHeader />}
             search={<WorkflowsSearch />}
-            pagination={ workflows.data?.items && workflows.data?.items?.length > 0 ? <WorkflowsPagination /> : null}
+            pagination={ (workflows.data?.items && workflows.data?.items?.length > 0) || workflows.isFetching || workflows.isLoading ? <WorkflowsPagination /> : null}
         >
             {children}
         </EntityContainer>

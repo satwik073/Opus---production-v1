@@ -3,6 +3,9 @@ import prisma from "@/lib/database-setup"
 import { createTRPCRouter, premiumProcedure, protectedProcedure } from "@/TRPC/initialize-trpc"
 import { generateSlug } from "random-word-slugs"
 import { z } from "zod"
+import { type Node, type Edge } from "@xyflow/react"
+import { TRPCError } from "@trpc/server"
+import { NodeType } from "@/generated/prisma"
 
 export const workflowsRouter = createTRPCRouter({
     create: premiumProcedure.mutation(async ({ ctx }) => {
@@ -10,12 +13,35 @@ export const workflowsRouter = createTRPCRouter({
             data: {
                 name: generateSlug(3),
                 userId: ctx.auth.user.id,
+                nodes: {
+                    create: {
+                        name: NodeType.INITIAL,
+                        type: NodeType.INITIAL,
+                        position: { x: 0, y: 0 },
+                    }
+                }
             }
         })
     }),
 
     remove: protectedProcedure.
         input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+            // First check if the workflow exists and belongs to the user
+            const workflow = await prisma.workflow.findUnique({
+                where: {
+                    id: input.id,
+                    userId: ctx.auth.user.id,
+                }
+            })
+
+            if (!workflow) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Workflow not found or you do not have permission to delete it'
+                })
+            }
+
+            // Delete the workflow
             return prisma.workflow.delete({
                 where: {
                     id: input.id,
@@ -37,12 +63,36 @@ export const workflowsRouter = createTRPCRouter({
     }),
     getOne: protectedProcedure.
         input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
-            return prisma.workflow.findUnique({
+            const workflow = await prisma.workflow.findUniqueOrThrow({
                 where: {
                     id: input.id,
                     userId: ctx.auth.user.id,
+                },
+                include: {
+                    nodes: true,
+                    connections: true,
                 }
             })
+            const nodes: Node[] = workflow.nodes.map((node) => ({
+                id: node.id,
+                type: node.type,
+                position: node.position as { x: number, y: number },
+                data: (node.data as Record<string, unknown>) || {},
+            }))
+            const edges: Edge[] = workflow.connections.map((connection) => ({
+                id: connection.id,
+                source: connection.fromNodeId,
+                target: connection.toNodeId,
+                sourceHandle: connection.fromOutput,
+                targetHandle: connection.toInput,
+
+            }))
+            return {
+                id: workflow.id,
+                name: workflow.name,
+                nodes,
+                edges,
+            }
         }),
     getMany: protectedProcedure.
         input(z.object({
