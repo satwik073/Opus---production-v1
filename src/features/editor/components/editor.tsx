@@ -2,7 +2,7 @@
 
 import { useSuspenseWorkflow } from '@/features/workflows/hooks/use-workflows'
 import { LoadingView, ErrorView } from '@/components/entity-views'
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type EdgeChange , type NodeChange, type Connection, Background, Controls, MiniMap, BackgroundVariant, Panel} from '@xyflow/react';
 import { useTheme } from 'next-themes';
 import '@xyflow/react/dist/style.css';
@@ -10,6 +10,9 @@ import { nodeComponents } from '@/config/node-components';
 import { AddNodeButton } from './add-node-button';
 import { useSetAtom } from 'jotai';
 import { editorAtom } from '../store/atoms';
+import { NodeType } from '@/generated/prisma';
+import { EditorWorkflowButton } from './editor-workflow-button';
+import { InngestRunsSheet } from './inngest-runs-sheet';
 
 interface EditorProps {
     workflowId: string
@@ -29,9 +32,14 @@ export const Editor = ({ workflowId }: EditorProps) => {
     const isDark = resolvedTheme === 'dark' || theme === 'dark';
     const [nodes, setNodes] = useState(workflow.nodes);
     const [edges, setEdges] = useState(workflow.edges);
+    const [runsSheetOpen, setRunsSheetOpen] = useState(false);
    
     const setEditor = useSetAtom(editorAtom);
     
+    const hasManualTrigger = useMemo(() => {
+        return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
+    }, [nodes]);
+
     const onNodesChange = useCallback(
       (changes : any[]) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
       [],
@@ -118,7 +126,11 @@ export const Editor = ({ workflowId }: EditorProps) => {
                     }}
                     maskColor={isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(52, 52, 52, 0.6)'}
                 />
-                <Panel position='top-right' className=''>
+                {hasManualTrigger && <Panel position='bottom-center' className=''>
+                    <EditorWorkflowButton workflowId={workflowId} onExecuteSuccess={() => setRunsSheetOpen(true)} />
+                </Panel>}
+                <Panel position='top-right' className='flex gap-2'>
+                    <InngestRunsSheet open={runsSheetOpen} onOpenChange={setRunsSheetOpen} />
                     <AddNodeButton />
                 </Panel>
             </ReactFlow> 

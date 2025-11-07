@@ -6,8 +6,24 @@ import { z } from "zod"
 import { type Node, type Edge } from "@xyflow/react"
 import { TRPCError } from "@trpc/server"
 import { NodeType } from "@/generated/prisma"
+import { inngest } from "@/inngest/client"
 
 export const workflowsRouter = createTRPCRouter({
+    execute: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+        const workflow = await prisma.workflow.findUniqueOrThrow({
+            where: {
+                id: input.id,
+                userId: ctx.auth.user.id,
+            },
+        })
+        await inngest.send({
+            name: "workflows/execute.workflow",
+            data: {
+                workflowId: input.id,
+            }
+        })
+        return workflow;
+    }),
     create: premiumProcedure.mutation(async ({ ctx }) => {
         return prisma.workflow.create({
             data: {

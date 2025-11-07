@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { NodeSelector } from "./node-selector";
 
-export const AddNodeButton = memo(() => {
+export const AddNodeButton = memo(({}) => {
     const [open, setOpen] = useState(false);
     const onOpenChange = (open: boolean) => {
         setOpen(open);
