@@ -32,9 +32,9 @@ export const EditorBreadcrumb = ({ workflowId }: { workflowId: string }) => {
 export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
     return (
         <div className="ml-auto">
-            <Button variant="default" size="sm" disabled={false}>
+            <Button variant="default" size="sm" disabled={false} className="cursor-pointer" >
                 <ArrowUpRight className="size-4" />
-                Publish
+                Publish workflow
             </Button>
         </div>
     )
