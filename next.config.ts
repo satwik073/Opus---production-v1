@@ -12,7 +12,16 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
     ]
-  }
+  },
+  async rewrites() {
+    const inngestDevServerUrl = process.env.INNGEST_DEV_SERVER_URL || 'http://localhost:8288';
+    return [
+      {
+        source: '/api/inngest-ui/:path*',
+        destination: `${inngestDevServerUrl}/:path*`,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {

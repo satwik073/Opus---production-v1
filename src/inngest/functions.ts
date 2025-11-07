@@ -8,16 +8,17 @@ const google = createGoogleGenerativeAI({
 });
 
 
-export const execute_ai_method = inngest.createFunction(
-    { id: "execute-ai", retries: 3 },
-    { event: "execute.ai" },
-    async ({ event, step }) => {
-        const { steps } = await step.ai.wrap("gemini-2.5-flash",
-            generateText, {
-            model: google('gemini-2.5-flash'),
-            system: 'You are a helpful assistant that can answer questions and help with tasks.',
-            prompt: 'What is the capital of France?'
-        })
-        return steps;
+export const executeWorkflow = inngest.createFunction(
+    {
+        id: "execute-workflow",
     },
-);
+    {
+        event: "workflows/execute.workflow",
+    },
+    async ({ event, step }) => {
+        await step.sleep("sleep-for-10-seconds", 10000);
+        return {
+            message: "Workflow executed successfully",
+        }
+    }
+)
