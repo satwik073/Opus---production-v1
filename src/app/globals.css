@@ -170,3 +170,10 @@
   --shadow-xl: 0rem 0.2rem 0.5rem -0.2rem hsl(220 30% 20% / 0.50), 0rem 8px 10px -1.2px hsl(220 30% 20% / 0.50);
   --shadow-2xl: 0rem 0.2rem 0.5rem -0.2rem hsl(220 30% 20% / 1.25);
 }
+
+.bg-canvasBase{
+  display: none;
+}
+nav{
+  display: none;
+}
