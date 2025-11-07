@@ -7,8 +7,10 @@ import { ArrowUpRight, SaveIcon } from 'lucide-react'
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
-import { useSuspenseWorkflow, useUpdateWorkflowname } from '@/features/workflows/hooks/use-workflows'
+import { useSuspenseWorkflow, useUpdateWorkflow, useUpdateWorkflowname } from '@/features/workflows/hooks/use-workflows'
 import { toast } from 'sonner'
+import { editorAtom } from '../store/atoms'
+import { useAtomValue } from 'jotai'
 
 
 export const EditorBreadcrumb = ({ workflowId }: { workflowId: string }) => {
@@ -30,9 +32,25 @@ export const EditorBreadcrumb = ({ workflowId }: { workflowId: string }) => {
 }
 
 export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
+    const editor = useAtomValue(editorAtom);
+    const  publishWorkflow = useUpdateWorkflow();
+
+    const handlePublish = async () => {
+        if (!editor) {
+            toast.error('Editor not initialized')
+            return
+        }
+       const nodes = editor.getNodes();
+       const edges = editor.getEdges();
+         publishWorkflow.mutate({
+            id: workflowId,
+            nodes, 
+            edges
+         })
+    }
     return (
         <div className="ml-auto">
-            <Button variant="default" size="sm" disabled={false} className="cursor-pointer" >
+            <Button variant="default" size="sm" disabled={publishWorkflow.isPending} className="cursor-pointer" onClick={handlePublish} >
                 <ArrowUpRight className="size-4" />
                 Publish workflow
             </Button>
