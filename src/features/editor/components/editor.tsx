@@ -8,6 +8,8 @@ import { useTheme } from 'next-themes';
 import '@xyflow/react/dist/style.css';
 import { nodeComponents } from '@/config/node-components';
 import { AddNodeButton } from './add-node-button';
+import { useSetAtom } from 'jotai';
+import { editorAtom } from '../store/atoms';
 
 interface EditorProps {
     workflowId: string
@@ -28,6 +30,8 @@ export const Editor = ({ workflowId }: EditorProps) => {
     const [nodes, setNodes] = useState(workflow.nodes);
     const [edges, setEdges] = useState(workflow.edges);
    
+    const setEditor = useSetAtom(editorAtom);
+    
     const onNodesChange = useCallback(
       (changes : any[]) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
       [],
@@ -84,7 +88,13 @@ export const Editor = ({ workflowId }: EditorProps) => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 fitView
+                onInit={setEditor}
                 nodeTypes={nodeComponents}
+                // snapGrid={[10, 10]}
+                // snapToGrid={true}
+                panOnScroll
+                // panOnDrag={false}
+                // selectionOnDrag
                 proOptions={{
                     hideAttribution: true,
                 }}

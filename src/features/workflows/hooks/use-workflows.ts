@@ -94,6 +94,46 @@ export const useRemoveWorkflow = () => {
     }))
 }
 
+export const useUpdateWorkflow = () => {
+    const trpc = useTRPC()
+    const queryClient = useQueryClient()
+    return useMutation(trpc.workflows.update.mutationOptions({
+        onSuccess: (data) => {
+            toast.success(`Workflow ${data.name} saved successfully`)
+            queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}))
+            queryClient.invalidateQueries(trpc.workflows.getOne.queryOptions({ id: data.id }))
+        },
+        onError: (error: any) => {
+            console.error('Failed to save workflow', error.message)
+        }
+    }))
+}
+
+export const useUpdateWorkflowWithModal = () => {
+    const trpc = useTRPC()
+    const queryClient = useQueryClient()
+    const { handleError, modal } = useUpgradeModal()
+    const mutation = useMutation(trpc.workflows.update.mutationOptions({
+        onSuccess: (data) => {
+            toast.success(`Workflow ${data.name} updated successfully`)
+            queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}))
+            queryClient.invalidateQueries(trpc.workflows.getOne.queryOptions({ id: data.id }))
+        },
+        onError: (error: any) => {
+            if (error instanceof TRPCClientError && error.data?.code === 'FORBIDDEN') {
+                handleError(error)
+            } else {
+                console.error('Failed to update workflow', error.message)
+            }
+        }
+    }))
+
+    return {
+        ...mutation,
+        modal
+    }
+}
+
 export const useSuspenseWorkflow = (id: string) => {
     const trpc = useTRPC()
     return useSuspenseQuery(trpc.workflows.getOne.queryOptions({ id }))
