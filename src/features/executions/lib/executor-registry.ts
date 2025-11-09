@@ -4,7 +4,7 @@ import { ManualTriggerExecutor } from "@/features/triggers/components/manual-tri
 import { HttpRequestExecutor } from "@/features/executions/components/http-request/executor";
 
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
-    [NodeType.HTTP_REQUEST]: HttpRequestExecutor,
+    [NodeType.HTTP_REQUEST]: HttpRequestExecutor as any,
     [NodeType.MANUAL_TRIGGER]: ManualTriggerExecutor,
     [NodeType.INITIAL]: ManualTriggerExecutor,
 }
