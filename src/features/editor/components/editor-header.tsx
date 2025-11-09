@@ -120,7 +120,7 @@ export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
 }
 const EditorHeader = ({ workflowId }: { workflowId: string }) => {
     return (
-        <header className='flex bg-white dark:bg-[#14181c] h-14 shrink-0 item-center gap-2 border-b py-3 px-4 dark:border-gray-800 border-gray-200'>
+        <header className='flex bg-white dark:bg-[#14181c] h-14 shrink-0 items-center gap-2 border-b py-3 px-4 dark:border-gray-800 border-gray-200'>
             <SidebarTrigger />
             <div className="flex flex-row items-center justify-between gap-x-4 w-full">
                 <EditorBreadcrumb workflowId={workflowId} />
