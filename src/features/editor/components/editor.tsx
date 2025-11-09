@@ -127,7 +127,7 @@ export const Editor = ({ workflowId }: EditorProps) => {
                     maskColor={isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(52, 52, 52, 0.6)'}
                 />
                 {hasManualTrigger && <Panel position='bottom-center' className=''>
-                    <EditorWorkflowButton workflowId={workflowId} onExecuteSuccess={() => setRunsSheetOpen(true)} />
+                    <EditorWorkflowButton workflowId={workflowId}  />
                 </Panel>}
                 <Panel position='top-right' className='flex gap-2'>
                     <InngestRunsSheet open={runsSheetOpen} onOpenChange={setRunsSheetOpen} />
