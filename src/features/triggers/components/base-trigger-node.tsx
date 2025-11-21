@@ -38,8 +38,8 @@ export const BaseTriggerNode = memo(({ id, icon: Icon, name, description, childr
             <NodeStatusIndicator status={status} variant="border" className="rounded-l-2xl" >
                 <BaseNode status={status} className="rounded-l-2xl relative border-[0.5px] border-gray-300 dark:border-gray-700" onDoubleClick={onDoubleClick}>
                     <BaseNodeContent>
-                        {typeof Icon === 'string' ? (
-                            <Image src={Icon} alt={name} width={16} height={16} />
+                        {typeof Icon === 'string' || typeof Icon === 'object' && 'src' in Icon ? (
+                            <Image src={typeof Icon === 'string' ? Icon : Icon['src']} alt={name} width={16} height={16} />
                         ) : (
                             <Icon className="size-4 text-muted-foreground" />
                         )}

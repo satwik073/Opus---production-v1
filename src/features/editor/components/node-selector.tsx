@@ -9,6 +9,7 @@ import { NodeType } from '@/generated/prisma';
 import { Separator } from '@/components/ui/separator';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
+import { imageLinks } from '../../../../public/logos/imagelinks';
 export type NodeTypeOption = {
     type: NodeType;
     label: string;
@@ -22,6 +23,12 @@ const triggerNode : NodeTypeOption[] = [
         label: 'Manual Trigger',
         description: 'Runs the flow on clicking a button. Good for getting started quickly.',
         icon: MousePointerIcon,
+    },
+    {
+        type: NodeType.GOOGLE_FORM_TRIGGER,
+        label: 'Google Form Trigger',
+        description: 'Runs the flow when a Google Form is submitted.',
+        icon: imageLinks.googleform,
     }
 ]
 
@@ -94,8 +101,8 @@ export const NodeSelector = ({open , onOpenChange, children}:NodeSelectorProps) 
                         return (
                             <div key={node.type} onClick={() => handleNodeSelect(node)} className="w-full justify-start h-auto px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary transition-all duration-300">
                                <div className="flex items-center gap-6 w-full">
-                                {typeof Icon === 'string' ? (
-                                    <img src={Icon} alt={node.label} className="size-6" />
+                                {typeof Icon === 'string' || typeof Icon === 'object' && 'src' in Icon ? (
+                                    <img src={typeof Icon === 'string' ? Icon : Icon['src']} alt={node.label} className="size-6" />
                                 ):(
                                     <Icon className="size-6" />
                                 )}
@@ -119,8 +126,8 @@ export const NodeSelector = ({open , onOpenChange, children}:NodeSelectorProps) 
                         return (
                             <div key={node.type} onClick={() => handleNodeSelect(node)} className="w-full justify-start h-auto  px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary transition-all duration-300">
                                <div className="flex items-center gap-6 w-full">
-                                {typeof Icon === 'string' ? (
-                                    <img src={Icon} alt={node.label} className="size-6" />
+                                {typeof Icon === 'string' || typeof Icon === 'object' && 'src' in Icon ? (
+                                    <img src={typeof Icon === 'string' ? Icon : Icon['src']} alt={node.label} className="size-6" />
                                 ):(
                                     <Icon className="size-6" />
                                 )}

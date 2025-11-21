@@ -7,6 +7,7 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
     [NodeType.HTTP_REQUEST]: HttpRequestExecutor as any,
     [NodeType.MANUAL_TRIGGER]: ManualTriggerExecutor,
     [NodeType.INITIAL]: ManualTriggerExecutor,
+    [NodeType.GOOGLE_FORM_TRIGGER]: ManualTriggerExecutor,
 }
 
 export const getExecutor = (nodeType: NodeType) : NodeExecutor=> {
