@@ -31,13 +31,11 @@ export const InngestRunsSheet = ({
     const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
     const setOpen = controlledOnOpenChange || setInternalOpen;
     
-    // Inngest Dev Server typically runs on port 8288
-    const inngestDevServerUrl = process.env.NEXT_PUBLIC_INNGEST_DEV_SERVER_URL || 'http://localhost:8288';
-    
-    // Show specific run if provided, otherwise show latest running runs
+    // Use proxy route to avoid CORS issues in production
+    // The proxy route will forward requests to the Inngest dev server
     const iframeUrl = runId 
-        ? `${inngestDevServerUrl}/runs/${runId}`
-        : `${inngestDevServerUrl}/runs?status=running`;
+        ? `/api/inngest-dev/runs/${runId}`
+        : `/api/inngest-dev/runs?status=running`;
 
     const defaultTrigger = (
         <Button variant="outline" size="icon" className="bg-background hover:bg-background/80 border-gray-300 border-1">
